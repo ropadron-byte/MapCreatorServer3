@@ -44,10 +44,16 @@
         .log-entry.repair { color: var(--green); }
         .log-entry.system { color: var(--blue); }
         
-        .char-card { background: var(--bg-darker); border: 1px solid var(--border); padding: 10px; margin-bottom: 5px; border-radius: 4px; cursor: pointer; display: flex; gap: 10px; }
+        /* TARJETAS DE PERSONAJE MEJORADAS */
+        .char-card { background: var(--bg-darker); border: 1px solid var(--border); padding: 10px; margin-bottom: 5px; border-radius: 4px; cursor: pointer; display: flex; gap: 10px; align-items: center; transition: all 0.2s; }
+        .char-card:hover { border-color: var(--border-lit); background: var(--bg-card); }
         .char-card.selected { border-color: var(--gold); background: rgba(255, 217, 102, 0.1); }
-        .pm-bar-wrap { height: 6px; background: #333; border-radius: 3px; margin-top: 5px; overflow: hidden; }
-        .pm-bar { height: 100%; transition: width 0.3s ease; }
+        .char-info { flex: 1; min-width: 0; }
+        .char-name { font-weight: bold; font-size: 13px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .char-pos { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+        .pm-text { font-size: 10px; color: var(--text-muted); margin-bottom: 2px; text-align: right; }
+        .pm-bar-wrap { height: 6px; background: #333; border-radius: 3px; overflow: hidden; }
+        .pm-bar { height: 100%; transition: width 0.3s ease, background-color 0.3s ease; }
         
         .cell-char-layer { width: 85%; height: 85%; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(0,0,0,0.5); box-shadow: 0 0 4px rgba(0,0,0,0.6); z-index: 3; }
         .cell-char-layer.selected-char { animation: pulseGlow 1.2s infinite alternate; box-shadow: 0 0 8px var(--gold); z-index: 4; }
@@ -148,6 +154,7 @@
                             <option value="🧙‍♂️">🧙‍♂️ Mago</option>
                             <option value="🧝‍♀️">🧝‍♀️ Elfo</option>
                             <option value="🧟">🧟 Zombie</option>
+                            <option value="🥷">🥷 Ninja</option>
                         </select>
                         <input type="file" id="charImageUpload" accept="image/*" style="display:none;">
                         <button class="btn btn-default btn-small" onclick="document.getElementById('charImageUpload').click()">🖼️</button>
@@ -159,17 +166,21 @@
                 <div class="panel">
                     <div class="panel-title" style="display: flex; justify-content: space-between; align-items: center;">
                         👥 Personajes Activos
-                        <button id="toggleCharsBtn" class="btn btn-small btn-default">Ocultar</button>
+                        <div style="display: flex; gap: 4px;">
+                            <button id="centerCharBtn" class="btn btn-small btn-blue" title="Centrar en personaje" style="display:none;">🎯</button>
+                            <button id="toggleCharsBtn" class="btn btn-small btn-default" title="Ocultar">👁️</button>
+                            <button id="deleteAllCharsBtn" class="btn btn-small btn-red" title="Eliminar Todos">🗑️</button>
+                        </div>
                     </div>
-                    <div id="selectedCharTag" style="display:none; background: rgba(255,71,87,0.1); border: 1px solid var(--red); padding: 5px; border-radius: 4px; margin-bottom: 10px; align-items: center; justify-content: space-between;">
-                        <span style="font-size: 11px; color: var(--red);"><strong id="selectedCharTagName">Nombre</strong> (Sel)</span>
+                    <div id="selectedCharTag" style="display:none; background: rgba(255,217,102,0.1); border: 1px solid var(--gold); padding: 5px; border-radius: 4px; margin-bottom: 10px; align-items: center; justify-content: space-between;">
+                        <span style="font-size: 11px; color: var(--gold);"><strong id="selectedCharTagName">Nombre</strong></span>
                         <div style="display: flex; gap: 5px;">
                             <button id="placeCharBtn" class="btn btn-small btn-blue" title="Colocar">📍</button>
                             <button id="deselectBtn" class="btn btn-small btn-default" title="Deseleccionar">❌</button>
                             <button id="deleteCharBtn" class="btn btn-small btn-red" title="Eliminar">🗑️</button>
                         </div>
                     </div>
-                    <div id="charListContainer" style="max-height: 200px; overflow-y: auto;">
+                    <div id="charListContainer" style="max-height: 250px; overflow-y: auto;">
                         <div style="color:var(--text-muted); font-size:12px;">Sin personajes creados.</div>
                     </div>
                 </div>
@@ -177,11 +188,10 @@
                 <div class="panel" id="movePanel">
                     <div class="panel-title" style="display: flex; justify-content: space-between;">
                         🚶 Movimiento
-                        <button id="resetIndividualMoveBtn" class="btn btn-small btn-blue">♻️ PM</button>
+                        <button id="resetIndividualMoveBtn" class="btn btn-small btn-blue">♻️ Restaurar PM</button>
                     </div>
                     <div style="text-align: center; color: var(--gold); font-size: 12px; margin-bottom: 10px;" id="selectedCharNameMove">Sin selección</div>
-                    <div id="moveButtonsContainer">
-                        </div>
+                    <div id="moveButtonsContainer"></div>
                 </div>
             </div>
         </div>
